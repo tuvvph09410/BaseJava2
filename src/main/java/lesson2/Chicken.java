@@ -9,14 +9,16 @@ package lesson2;
  *
  * @author vuvantu
  */
-public class MainClass {
+public class Chicken extends Animal implements RunAble {
 
-    public static void main(String[] args) {
-//        Animal a = new Cat();
-        
-        Animal a = new Chicken();
-        System.out.println(Chicken.soChan);
-       
-           
+    public static int soChan = 2;
+
+    @Override
+    public void tiengKeu() {
     }
+
+    @Override
+    public void run() {
+    }
+
 }

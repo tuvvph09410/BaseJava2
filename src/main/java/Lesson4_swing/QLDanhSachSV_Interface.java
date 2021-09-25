@@ -13,17 +13,15 @@ import java.util.ArrayList;
  */
 public interface QLDanhSachSV_Interface {
 
-    public void reSet();
+    public void add(Nguoi nguoi);
 
-    public void add(SinhVien sinhVien);
+    public void update(int viTri, Nguoi nguoi);
 
-    public void update(int viTri, SinhVien sinhVien);
+    public void delete(int viTri);
 
-    public void delete(int viTri, SinhVien sinhVien);
+    public Nguoi get(int viTri);
 
-    public SinhVien get(int viTri);
+    public ArrayList<Nguoi> getList();
 
-    public ArrayList<SinhVien> getList();
-
-    public void setList(ArrayList<SinhVien> arrayListSV);
+    public void setList(ArrayList<Nguoi> arrayList);
 }

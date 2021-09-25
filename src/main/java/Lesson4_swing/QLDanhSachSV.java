@@ -7,16 +7,15 @@ package Lesson4_swing;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author vuvantu
  */
-public final class QLDanhSachSV extends javax.swing.JFrame implements QLDanhSachSV_Interface {
+public final class QLDanhSachSV extends javax.swing.JFrame {
 
-    private ArrayList<SinhVien> listSV;
-    private SinhVien sinhVien;
-    private String gioiTinh = "";
+    private QLDanhSachSV_Interface danhSachSV_Interface;
 
     /**
      * Creates new form QLDanhSachSV
@@ -24,6 +23,8 @@ public final class QLDanhSachSV extends javax.swing.JFrame implements QLDanhSach
     public QLDanhSachSV() {
         initComponents();
         this.reSet();
+        this.danhSachSV_Interface = new QLDS();
+        this.showTable();
 
     }
 
@@ -165,6 +166,11 @@ public final class QLDanhSachSV extends javax.swing.JFrame implements QLDanhSach
         });
 
         bthXoa.setText("Xoá");
+        bthXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bthXoaActionPerformed(evt);
+            }
+        });
 
         bthLamMoi.setText("Làm Mới");
         bthLamMoi.addActionListener(new java.awt.event.ActionListener() {
@@ -314,6 +320,11 @@ public final class QLDanhSachSV extends javax.swing.JFrame implements QLDanhSach
                 return canEdit [columnIndex];
             }
         });
+        tblSinhVien.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSinhVienMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblSinhVien);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -408,6 +419,32 @@ public final class QLDanhSachSV extends javax.swing.JFrame implements QLDanhSach
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
+        int row = this.tblSinhVien.getSelectedRow();
+        if (row == -1) {
+            return;
+        }
+        String hoTen = this.txtHoTen.getText();
+        String maSV = this.txtMaSV.getText();
+        String queQuan = this.txtQueQuan.getText();
+        String diaChi = this.txtDiaChi.getText();
+        int sDT = Integer.parseInt(this.txtSDT.getText());
+        Double tienTrongVi = Double.parseDouble(this.txtSoTienTV.getText());
+        String gioiTinh = "";
+        if (this.radioGTNam.isSelected() == true) {
+            gioiTinh = "Nam";
+
+        } else {
+            gioiTinh = "Nữ";
+
+        }
+        String chuyenNghanh = this.cbbChuyenNghanh.getSelectedItem().toString();
+        int tuoi = Integer.parseInt(this.cbbTuoi.getSelectedItem().toString());
+
+        SinhVien sinhVien = new SinhVien(maSV, tienTrongVi, chuyenNghanh, sDT, hoTen, diaChi, tuoi, queQuan, gioiTinh);
+
+        this.danhSachSV_Interface.update(row, sinhVien);
+        this.showTable();
+        JOptionPane.showMessageDialog(this, "Cập Nhật Thành Công");
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void bthLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bthLamMoiActionPerformed
@@ -417,13 +454,90 @@ public final class QLDanhSachSV extends javax.swing.JFrame implements QLDanhSach
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-        this.add(sinhVien);
+        String hoTen = this.txtHoTen.getText();
+        String maSV = this.txtMaSV.getText();
+        String queQuan = this.txtQueQuan.getText();
+        String diaChi = this.txtDiaChi.getText();
+        int sDT = Integer.parseInt(this.txtSDT.getText());
+        Double tienTrongVi = Double.parseDouble(this.txtSoTienTV.getText());
+        String gioiTinh = "";
+        if (this.radioGTNam.isSelected() == true) {
+            gioiTinh = "Nam";
+
+        } else {
+            gioiTinh = "Nữ";
+
+        }
+        String chuyenNghanh = this.cbbChuyenNghanh.getSelectedItem().toString();
+        int tuoi = Integer.parseInt(this.cbbTuoi.getSelectedItem().toString());
+
+        SinhVien sinhVien = new SinhVien(maSV, tienTrongVi, chuyenNghanh, sDT, hoTen, diaChi, tuoi, queQuan, gioiTinh);
+
+        this.danhSachSV_Interface.add(sinhVien);
+
+        JOptionPane.showMessageDialog(this, "Thêm Thành Công");
+        this.showTable();
+
+
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void tblSinhVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSinhVienMouseClicked
+        // TODO add your handling code here:
+        int row = this.tblSinhVien.getSelectedRow();
+        if (row == -1) {
+            return;
+        }
+        String hoTen = this.tblSinhVien.getValueAt(row, 0).toString();
+        String maSV = this.tblSinhVien.getValueAt(row, 1).toString();
+        String tuoi = this.tblSinhVien.getValueAt(row, 2).toString();
+        String gioiTinh = this.tblSinhVien.getValueAt(row, 3).toString();
+        String sDT = this.tblSinhVien.getValueAt(row, 4).toString();
+        String queQuan = this.tblSinhVien.getValueAt(row, 5).toString();
+        String diaChi = this.tblSinhVien.getValueAt(row, 6).toString();
+        String chuyenNghanh = this.tblSinhVien.getValueAt(row, 7).toString();
+        String soTienTrongVi = this.tblSinhVien.getValueAt(row, 8).toString();
+
+        this.txtHoTen.setText(hoTen);
+        this.txtMaSV.setText(maSV);
+        this.cbbTuoi.setSelectedItem(tuoi);
+        this.txtSDT.setText(sDT);
+        this.txtQueQuan.setText(queQuan);
+        this.txtDiaChi.setText(diaChi);
+        this.cbbChuyenNghanh.setSelectedItem(chuyenNghanh);
+        this.txtSoTienTV.setText(soTienTrongVi);
+
+        if (gioiTinh.equals("Nam")) {
+            this.radioGTNam.setSelected(true);
+        } else {
+            this.radioGTNu.setSelected(true);
+        }
+
+
+    }//GEN-LAST:event_tblSinhVienMouseClicked
+
+    private void bthXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bthXoaActionPerformed
+        // TODO add your handling code here:
+        int row = this.tblSinhVien.getSelectedRow();
+        if (row == -1) {
+            return;
+        }
+        int xacNhan = JOptionPane.showConfirmDialog(this, "Bạn có muốn xoá bản ghi này không ?");
+        System.out.println(xacNhan);
+        if (xacNhan == JOptionPane.YES_OPTION) {
+            this.danhSachSV_Interface.delete(row);
+            this.showTable();
+        } else if (xacNhan == JOptionPane.NO_OPTION) {
+
+        } else if (xacNhan == JOptionPane.CANCEL_OPTION) {
+
+        }
+
+    }//GEN-LAST:event_bthXoaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -495,7 +609,6 @@ public final class QLDanhSachSV extends javax.swing.JFrame implements QLDanhSach
     private javax.swing.JTextField txtSoTienTV;
     // End of variables declaration//GEN-END:variables
 
-    @Override
     public void reSet() {
         this.txtHoTen.setText("");
         this.txtMaSV.setText("");
@@ -506,66 +619,31 @@ public final class QLDanhSachSV extends javax.swing.JFrame implements QLDanhSach
         this.radioGTNam.setSelected(true);
         this.cbbTuoi.setSelectedIndex(0);
         this.cbbChuyenNghanh.setSelectedIndex(0);
-
     }
 
-    @Override
-    public void add(SinhVien sinhVien) {
-        this.listSV = new ArrayList<>();
+    public void showTable() {
 
-        sinhVien = new SinhVien();
+        DefaultTableModel tableModel = (DefaultTableModel) this.tblSinhVien.getModel();
 
-        sinhVien.setHoTen(this.txtHoTen.getText());
-        sinhVien.setMaSV(this.txtMaSV.getText());
-        sinhVien.setQueQuan(this.txtQueQuan.getText());
-        sinhVien.setDiaChi(this.txtDiaChi.getText());
-        sinhVien.setsDT(Integer.parseInt(this.txtSDT.getText()));
-        sinhVien.setTienTrongVi(Double.parseDouble(this.txtSoTienTV.getText()));
+        //hàm nay xoá toàn bộ dữ liệu đang có JTable
+        tableModel.setRowCount(0);
 
-        if (this.radioGTNam.isSelected() == true) {
-            this.gioiTinh = "Nam";
-
-        } else {
-            this.gioiTinh = "Nữ";
-
+        ArrayList<Nguoi> list = danhSachSV_Interface.getList();
+        for (int i = 0; i < list.size(); i++) {
+            SinhVien sinhVien = (SinhVien) list.get(i);
+            Object[] row = new Object[]{
+                sinhVien.getHoTen(),
+                sinhVien.getMaSV(),
+                sinhVien.getTuoi(),
+                sinhVien.getGioiTinh(),
+                sinhVien.getsDT(),
+                sinhVien.getQueQuan(),
+                sinhVien.getDiaChi(),
+                sinhVien.getChuyenNganh(),
+                sinhVien.getTienTrongVi(),};
+            tableModel.addRow(row);
         }
-        sinhVien.setGioiTinh(this.gioiTinh);
 
-        sinhVien.setChuyenNganh(this.cbbChuyenNghanh.getSelectedItem().toString());
-
-        sinhVien.setTuoi(Integer.parseInt(this.cbbTuoi.getSelectedItem().toString()));
-
-        this.listSV.add(sinhVien);
-
-        if (!this.listSV.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Thêm Thành Công");
-        } else {
-            JOptionPane.showMessageDialog(this, "Thêm Thất Bại");
-        }
     }
 
-    @Override
-    public void update(int viTri, SinhVien sinhVien) {
-        this.listSV.set(viTri, sinhVien);
-    }
-
-    @Override
-    public void delete(int viTri, SinhVien sinhVien) {
-        this.listSV.remove(viTri);
-    }
-
-    @Override
-    public SinhVien get(int viTri) {
-        return this.listSV.get(viTri);
-    }
-
-    @Override
-    public ArrayList<SinhVien> getList() {
-        return this.listSV;
-    }
-
-    @Override
-    public void setList(ArrayList<SinhVien> arrayListSV) {
-        this.listSV = arrayListSV;
-    }
 }
